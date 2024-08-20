@@ -114,10 +114,10 @@ for (dep_var in dependent_vars) {
 
 #Introduce the correct sphingolipid names
 sphingo_names <- c(
-  "SM(d18:1/18:1(9Z))",
+  "SM(d18:1/18:1)",
   "Cer(d18:1/16:0)",
   "SM(d18:1/16:0)",
-  "Cer(d18:1/24:1(15Z))",
+  "Cer(d18:1/24:1)",
   "CerP(d18:1/16:0)",
   "Sph(d18:1)",
   "Cer(d18:0/16:0)",
@@ -127,7 +127,7 @@ sphingo_names <- c(
   "SM(d18:1/12:0)", 
   "Cer(d18:1/10:0)", 
   "Cer(d18:2/24:1)",
-  "Cer(d18:1/18:1(9Z))", 
+  "Cer(d18:1/18:1)", 
   "GlcSph(18:1)",
   "Cer(d18:2/24:0)",
   "Cer(d18:1/20:0)",
@@ -136,7 +136,7 @@ sphingo_names <- c(
   "GlcCer(d18:1/16:0)", 
   "Cer(d18:0/22:0) or Cer(m18:12/2:0)", 
   "LacCer(d18:1/16:0)",
-  "GlcCer(d18:1/24:1(15Z))", 
+  "GlcCer(d18:1/24:1)", 
   "GlcCer(d18:1/18:0)",
   "Cer(d18:1/12:0)",
   "Cer(d18:1/22:0)",
@@ -205,7 +205,7 @@ for (i in seq_along(fitted_models_list_m)) {
   p <- ggplot(predmat_mod_long_m, aes(x = Age, y = value, group = variable)) +
     geom_point(data = subset(dat_long, variable %in% species_name & Sex == 0), aes(y = value, x = Age), inherit.aes = FALSE, size = 2, alpha = 0.5) + # Subset data to include "SM(d18:1/16:0)" only
     geom_line(aes(colour = variable), linewidth = 1) +
-    xlab("Age") +
+    xlab("Age (years)") +
     ylab(paste0(sphingo_names[i])) +
     ggtitle(paste0("N = ", nobs(mod_m), ", distribution = ", mod_m$family[2])) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
@@ -248,7 +248,7 @@ for (i in seq_along(fitted_models_list_m)) {
   p_publication <- ggplot(predmat_mod_long_m, aes(x = Age, y = value, group = variable)) +
     geom_line(aes(linetype = line_ind), linewidth = 1) +
     geom_dl(aes(label = variable), method = list(list("last.points", "calc.boxes", "enlarge.box", my.dl), dl.trans(x = x + 0.2), cex = 1.2)) +
-    xlab("Age") +
+    xlab("Age (years)") +
     ylab(paste0(sphingo_names[i])) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
     scale_x_continuous(breaks = seq(0, 90, 5)) + # Format x-axis
@@ -326,10 +326,10 @@ for (dep_var in dependent_vars) {
 
 #Introduce the correct sphingolipid names
 sphingo_names <- c(
-  "SM(d18:1/18:1(9Z))",
+  "SM(d18:1/18:1)",
   "Cer(d18:1/16:0)",
   "SM(d18:1/16:0)",
-  "Cer(d18:1/24:1(15Z))",
+  "Cer(d18:1/24:1)",
   "CerP(d18:1/16:0)",
   "Sph(d18:1)",
   "Cer(d18:0/16:0)",
@@ -339,7 +339,7 @@ sphingo_names <- c(
   "SM(d18:1/12:0)", 
   "Cer(d18:1/10:0)", 
   "Cer(d18:2/24:1)",
-  "Cer(d18:1/18:1(9Z))", 
+  "Cer(d18:1/18:1)", 
   "GlcSph(18:1)",
   "Cer(d18:2/24:0)",
   "Cer(d18:1/20:0)",
@@ -348,7 +348,7 @@ sphingo_names <- c(
   "GlcCer(d18:1/16:0)", 
   "Cer(d18:0/22:0) or Cer(m18:12/2:0)", 
   "LacCer(d18:1/16:0)",
-  "GlcCer(d18:1/24:1(15Z))", 
+  "GlcCer(d18:1/24:1)", 
   "GlcCer(d18:1/18:0)",
   "Cer(d18:1/12:0)",
   "Cer(d18:1/22:0)",
@@ -418,7 +418,7 @@ for (i in seq_along(fitted_models_list_f)) {
   p <- ggplot(predmat_mod_long_f, aes(x = Age, y = value, group = variable)) +
     geom_point(data = subset(dat_long, variable %in% species_name & Sex == 1), aes(y = value, x = Age), inherit.aes = FALSE, size = 2, alpha = 0.5) + # Subset data to include "SM(d18:1/16:0)" only
     geom_line(aes(colour = variable), linewidth = 1) +
-    xlab("Age") +
+    xlab("Age (years)") +
     ylab(paste0(sphingo_names[i])) +
     ggtitle(paste0("N = ", nobs(mod_f), ", distribution = ", mod_f$family[2])) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
@@ -461,7 +461,7 @@ for (i in seq_along(fitted_models_list_f)) {
   p_publication <- ggplot(predmat_mod_long_f, aes(x = Age, y = value, group = variable)) +
     geom_line(aes(linetype = line_ind), linewidth = 1) +
     geom_dl(aes(label = variable), method = list(list("last.points", "calc.boxes", "enlarge.box", my.dl), dl.trans(x = x + 0.2), cex = 1.2)) +
-    xlab("Age") +
+    xlab("Age (years)") +
     ylab(paste0(sphingo_names[i])) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
     scale_x_continuous(breaks = seq(0, 90, 5)) + # Format x-axis
