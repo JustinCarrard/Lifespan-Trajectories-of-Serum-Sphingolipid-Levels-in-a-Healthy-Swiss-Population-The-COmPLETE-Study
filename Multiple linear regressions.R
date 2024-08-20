@@ -253,7 +253,7 @@ for (i in seq_along(names(my_lms))) {
   res_frame_Age$std.error[which(res_frame_Age$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "Std. Error"]["Age_std"]
   res_frame_Age$statistic[which(res_frame_Age$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "t value"]["Age_std"]
   res_frame_Age$p.value[which(res_frame_Age$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "Pr(>|t|)"]["Age_std"]
-  res_frame_Age$response[which(res_frame_Age$term %in% names(my_lms)[i])] <- "Age"
+  res_frame_Age$response[which(res_frame_Age$term %in% names(my_lms)[i])] <- "Age (years)"
   
   rm(sum_tmp)
   
@@ -349,7 +349,7 @@ for (i in seq_along(names(my_lms))) {
   res_frame_Statins$std.error[which(res_frame_Statins$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "Std. Error"]["Statins1"]
   res_frame_Statins$statistic[which(res_frame_Statins$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "t value"]["Statins1"]
   res_frame_Statins$p.value[which(res_frame_Statins$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "Pr(>|t|)"]["Statins1"]
-  res_frame_Statins$response[which(res_frame_Statins$term %in% names(my_lms)[i])] <- "Statins intake"
+  res_frame_Statins$response[which(res_frame_Statins$term %in% names(my_lms)[i])] <- "Statin intake"
   
   rm(sum_tmp)
   
@@ -397,10 +397,66 @@ for (i in seq_along(names(my_lms))) {
   res_frame_Total_PA$std.error[which(res_frame_Total_PA$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "Std. Error"]["Total_PA_std"]
   res_frame_Total_PA$statistic[which(res_frame_Total_PA$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "t value"]["Total_PA_std"]
   res_frame_Total_PA$p.value[which(res_frame_Total_PA$term %in% names(my_lms)[i])] <- sum_tmp$coefficients[, "Pr(>|t|)"]["Total_PA_std"]
-  res_frame_Total_PA$response[which(res_frame_Total_PA$term %in% names(my_lms)[i])] <- "Daily total physical activity"
+  res_frame_Total_PA$response[which(res_frame_Total_PA$term %in% names(my_lms)[i])] <- "Total daily physical activity"
   
   rm(sum_tmp)
   
+}
+
+#------------------------------------------------------------------------------------------
+# Extract and add confidence intervals to your result frames
+#------------------------------------------------------------------------------------------
+
+for (i in seq_along(names(my_lms))) {
+  
+  sum_tmp <- summary(my_lms[[i]])
+  ci_tmp <- confint(my_lms[[i]], level = 0.95)  # Calculate confidence intervals
+
+  # Extracting CI for Age
+  lower_ci_age <- ci_tmp["Age_std", 1]  # Extract lower CI limit for Age_std
+  upper_ci_age <- ci_tmp["Age_std", 2]  # Extract upper CI limit for Age_std
+  res_frame_Age$lower_ci[which(res_frame_Age$term %in% names(my_lms)[i])] <- lower_ci_age
+  res_frame_Age$upper_ci[which(res_frame_Age$term %in% names(my_lms)[i])] <- upper_ci_age
+
+  # Extracting CI for Sex
+  lower_ci_sex <- ci_tmp["Sex1", 1]
+  upper_ci_sex <- ci_tmp["Sex1", 2]
+  res_frame_Sex$lower_ci[which(res_frame_Sex$term %in% names(my_lms)[i])] <- lower_ci_sex
+  res_frame_Sex$upper_ci[which(res_frame_Sex$term %in% names(my_lms)[i])] <- upper_ci_sex
+
+  # Extracting CI for the interaction Age and Sex
+  lower_ci_age_sex <- ci_tmp["Age_std:Sex1", 1]  
+  upper_ci_age_sex <- ci_tmp["Age_std:Sex1", 2]  
+  res_frame_Age_Sex$lower_ci[which(res_frame_Age_Sex$term %in% names(my_lms)[i])] <- lower_ci_age_sex
+  res_frame_Age_Sex$upper_ci[which(res_frame_Age_Sex$term %in% names(my_lms)[i])] <- upper_ci_age_sex
+  
+  # Extracting CI for VO2peak
+  lower_ci_VO2peak <- ci_tmp["VO2peak_mlkgmin_std", 1]  
+  upper_ci_VO2peak <- ci_tmp["VO2peak_mlkgmin_std", 2]  
+  res_frame_VO2peak$lower_ci[which(res_frame_VO2peak$term %in% names(my_lms)[i])] <- lower_ci_VO2peak
+  res_frame_VO2peak$upper_ci[which(res_frame_VO2peak$term %in% names(my_lms)[i])] <- upper_ci_VO2peak
+  
+  # Extracting CI for Statins
+  lower_ci_statins <- ci_tmp["Statins1", 1]  
+  upper_ci_statins <- ci_tmp["Statins1", 2]  
+  res_frame_Statins$lower_ci[which(res_frame_Statins$term %in% names(my_lms)[i])] <- lower_ci_statins
+  res_frame_Statins$upper_ci[which(res_frame_Statins$term %in% names(my_lms)[i])] <- upper_ci_statins
+  
+  # Extracting CI for PBF
+  lower_ci_pbf <- ci_tmp["PBF_std", 1]  
+  upper_ci_pbf <- ci_tmp["PBF_std", 2]  
+  res_frame_PBF$lower_ci[which(res_frame_PBF$term %in% names(my_lms)[i])] <- lower_ci_pbf
+  res_frame_PBF$upper_ci[which(res_frame_PBF$term %in% names(my_lms)[i])] <- upper_ci_pbf
+  
+  # Extracting CI for Total PA
+  lower_ci_pa <- ci_tmp["Total_PA_std", 1]  
+  upper_ci_pa <- ci_tmp["Total_PA_std", 2]  
+  res_frame_Total_PA$lower_ci[which(res_frame_Total_PA$term %in% names(my_lms)[i])] <- lower_ci_pa
+  res_frame_Total_PA$upper_ci[which(res_frame_Total_PA$term %in% names(my_lms)[i])] <- upper_ci_pa
+  
+  # Clear temporary variables
+  rm(sum_tmp, ci_tmp, lower_ci_age, upper_ci_age, lower_ci_sex, upper_ci_sex, lower_ci_age_sex, upper_ci_age_sex,
+    lower_ci_VO2peak, upper_ci_VO2peak, lower_ci_statins, upper_ci_statins, lower_ci_pbf, upper_ci_pbf, lower_ci_pa, upper_ci_pa)
 }
 
 #------------------------------------------------------------------------------------------
@@ -442,6 +498,25 @@ Overall <- Overall[order(-Overall$estimate), ]
 
 #remove suffixes from lipid subclasses' name
 Overall$term=gsub("_log2_std","",Overall$term)
+
+Overall_final <- Overall
+
+#rename columns
+names(Overall_final)[1] <- "Dependent variable"
+names(Overall_final)[2] <- "β coefficient"
+names(Overall_final)[3] <- "standard error"
+names(Overall_final)[5] <- "p-value"
+names(Overall_final)[6] <- "Independent variables"
+names(Overall_final)[7] <- "95% CI lower bound for β coefficient"
+names(Overall_final)[8] <- "95% CI higher bound for β coefficient"
+names(Overall_final)[9] <- "BH p-value"
+names(Overall_final)[10] <- "Categorical BH p-value"
+
+#reorder columns
+Overall_final <- Overall_final[, c(1, 6, 2, 7, 8, 3, 4, 5, 9, 10)]
+head(Overall_final)
+
+# write_xlsx(Overall_final, "results.xlsx")
 
 #------------------------------------------------------------------------------------------
 # Start rain plot
@@ -506,6 +581,8 @@ thm <-
 #------------------------------------------------------------------------------------------
 # Bare-bones rainplot
 #------------------------------------------------------------------------------------------
+
+plot_data$response <- factor(plot_data$response, levels = c("Age (years)", "Female", "Interaction age:female", "Total daily physical activity", "Body fat (%)", "Statin intake", "VO2peak (ml/min/kg)"))
 
 rainplot <-
   ggplot(plot_data) +
@@ -614,4 +691,3 @@ p
 
 ggsave(paste(graphics_path, paste("rain_plot.png", sep = ""), sep = "/"), p, width = 6*1, height = 10*1, units = "in", dpi = 300)
 
-# write_xlsx(Overall, "results.xlsx")
