@@ -170,10 +170,37 @@ for (i in seq_along(fitted_models_list_m)) {
   dev.off()
   
   #------------------------------------------------------------------------------------------
-  # Males: plot centiles
+  # Males: Save centiles as Excel-table
   #------------------------------------------------------------------------------------------
   
   mod_m <- fitted_models_list_m[[i]]
+  
+  # Which centiles to save
+  centiles_pred <- c(3, 15, 50, 85, 97)
+  
+  # Predict centiles and save them in a data frame
+  predmat_mod_m <- centiles.pred(
+    obj = mod_m
+    , type = "centiles"
+    , xname = "Age"
+    , xvalues = seq(min(dat$Age), max(dat$Age), by = 1) # Only for each age in 1-year-steps
+    , cent = centiles_pred
+    , calibration = TRUE
+  )
+  
+  # Rename the variables in the data frame
+  names(predmat_mod_m)[1] <- "Age"
+  names(predmat_mod_m)[2:(length(centiles_pred) + 1)] <- paste0(centiles_pred, " P")
+  
+  # Save Excel-sheet with centiles
+  write_xlsx(predmat_mod_m, path = paste0(text_path, "/", species_name_clean,  "_males.xlsx"))
+  
+  # Clean up
+  rm(predmat_mod_m)
+  
+  #------------------------------------------------------------------------------------------
+  # Males: plot centiles
+  #------------------------------------------------------------------------------------------
   
   # Which centiles to plot
   centiles_pred <- c(3, 15, 50, 85, 97)
@@ -381,12 +408,38 @@ for (i in seq_along(fitted_models_list_f)) {
   wp(fitted_models_list_f[[i]])
   dev.off()
   
+  #------------------------------------------------------------------------------------------
+  # Females: Save centiles as Excel-table
+  #------------------------------------------------------------------------------------------
+  
+  mod_f <- fitted_models_list_f[[i]]
+  
+  # Which centiles to save
+  centiles_pred <- c(3, 15, 50, 85, 97)
+  
+  # Predict centiles and save them in a data frame
+  predmat_mod_f <- centiles.pred(
+    obj = mod_f
+    , type = "centiles"
+    , xname = "Age"
+    , xvalues = seq(min(dat$Age), max(dat$Age), by = 1) # Only for each age in 1-year-steps
+    , cent = centiles_pred
+    , calibration = TRUE
+  )
+  
+  # Rename the variables in the data frame
+  names(predmat_mod_f)[1] <- "Age"
+  names(predmat_mod_f)[2:(length(centiles_pred) + 1)] <- paste0(centiles_pred, " P")
+  
+  # Save Excel-sheet with centiles
+  write_xlsx(predmat_mod_f, path = paste0(text_path, "/", species_name_clean,  "_females.xlsx"))
+  
+  # Clean up
+  rm(predmat_mod_f)
   
   #------------------------------------------------------------------------------------------
   # Females: plot centiles
   #------------------------------------------------------------------------------------------
-  
-  mod_f <- fitted_models_list_f[[i]]
   
   # Which centiles to plot
   centiles_pred <- c(3, 15, 50, 85, 97)
@@ -484,3 +537,4 @@ for (i in seq_along(fitted_models_list_f)) {
   ggsave(paste0(graphics_path, "/", species_name_clean, "model_percentiles_final_females.png"), p_publication, width = 20*0.6, height = 14*0.6, units = "in", dpi = 300, type = "cairo-png")
   
 }
+
