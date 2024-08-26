@@ -52,7 +52,7 @@ str(dat)
 #------------------------------------------------------------------------------------------
 # Reshape to long
 #------------------------------------------------------------------------------------------
-(vars_to_plot <- names(dat)[c(21:49)])
+(vars_to_plot <- names(dat)[c(15:43)])
 
 dat_long <- reshape2::melt(
   dat
@@ -537,4 +537,3 @@ for (i in seq_along(fitted_models_list_f)) {
   ggsave(paste0(graphics_path, "/", species_name_clean, "model_percentiles_final_females.png"), p_publication, width = 20*0.6, height = 14*0.6, units = "in", dpi = 300, type = "cairo-png")
   
 }
-
