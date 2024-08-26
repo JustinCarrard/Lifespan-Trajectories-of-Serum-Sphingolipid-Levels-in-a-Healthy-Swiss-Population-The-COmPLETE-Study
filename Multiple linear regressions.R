@@ -91,7 +91,7 @@ dat$Total_PA <- dat$Total_LPA + dat$Total_MPA + dat$Total_VPA
 #------------------------------------------------------------------------------------------
 
 #log2_transformation_lipid_subclasses_and_clinical_lipids
-(variables_to_transform <- names(dat)[21:49]) # Name of variables to transform with log2
+(variables_to_transform <- names(dat)[15:43]) # Name of variables to transform with log2
 
 for (i in variables_to_transform) {
   dat[, paste0(i, "_log2")] <- log2(dat[, i])
@@ -127,7 +127,7 @@ dev.off()
 #------------------------------------------------------------------------------------------
 
 #z_standardisation_dependent_variables
-(variables_to_standardize <- names(dat)[c(5:6, 11:20, 51:80)])
+(variables_to_standardize <- names(dat)[c(5:6, 9:14, 45:74)])
 
 for (i in variables_to_standardize) {
   dat[, paste0(i, "_std")] <- c(scale(dat[, i], center = TRUE, scale = TRUE))
@@ -141,8 +141,6 @@ head(dat)
 #------------------------------------------------------------------------------------------
 
 dat$Sex <- factor(dat$Sex, levels = 0:1, labels = c("male", "female"))
-dat$NYHA_Class <- factor(dat$NYHA_Class)
-dat$Healthy <- factor(dat$Healthy)
 dat$Statins <- factor(dat$Statins)
 dat$Sampling_time_cat <- factor(dat$Sampling_time_cat)
 
@@ -151,12 +149,12 @@ dat$Sampling_time_cat <- factor(dat$Sampling_time_cat)
 #------------------------------------------------------------------------------------------
 
 # Some descriptive graphics
-(vars_to_plot <- names(dat)[c(94:122)])
+(vars_to_plot <- names(dat)[c(84:112)])
 
 # Reshape to long
 dat_long <- reshape2::melt(
   dat
-  , id.vars = c("Sex", "Age", "Statins", "Healthy", "NYHA_Class")
+  , id.vars = c("Sex", "Age", "Statins")
   , measure.vars = vars_to_plot
 )
 
@@ -207,7 +205,7 @@ sapply(dat, function(x) sum(is.na(x)))
 #------------------------------------------------------------------------------------------
 
 #univariate_multiple_linear_regressions
-my_lms <- lapply(dat[,c(94:122)], function(x) lm(x ~ Age_std * Sex + VO2peak_mlkgmin_std + Total_PA_std + Statins + PBF_std + Sampling_time_cat + Fasting_std, data = dat))
+my_lms <- lapply(dat[,c(84:112)], function(x) lm(x ~ Age_std * Sex + VO2peak_mlkgmin_std + Total_PA_std + Statins + PBF_std + Sampling_time_cat + Fasting_std, data = dat))
 
 #------------------------------------------------------------------------------------------
 # Summaries & plot
@@ -690,4 +688,3 @@ p <- ggarrange(dendro, rainplot, ncol = 2, widths = c(1, 5))
 p
 
 ggsave(paste(graphics_path, paste("rain_plot.png", sep = ""), sep = "/"), p, width = 6*1, height = 10*1, units = "in", dpi = 300)
-
